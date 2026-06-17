@@ -1,0 +1,11 @@
+{
+  "owner": "yegor256",
+  "repo": "bibcop-action",
+  "version": "0.0.4",
+  "commit_sha": "7fae44d3af0450210e56c54fc4311f92b7421382",
+  "url": "https://github.com/yegor256/bibcop-action",
+  "policy_sha": "d636be7e43ef829af6e853da6b3c7566db9f72fe",
+  "test_policy_sha": "843adf9e4b8f85d0c08b27b9d0b09dd094b54702",
+  "test_agent_version": "1",
+  "harden_agent_version": "1"
+}

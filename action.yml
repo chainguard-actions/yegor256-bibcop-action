@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 Yegor Bugayenko
+# SPDX-License-Identifier: MIT
+---
+name: 'bibcop-action'
+description: 'Check the quality of .bib files'
+branding:
+  icon: alert-triangle
+  color: orange
+runs:
+  using: 'docker'
+  image: 'docker://yegor256/bibcop-action@sha256:c43d73a2701d69a1639004f328a3fb71dbe7be67a9aedb92162667c4dc418b6f' # 0.0.4
+inputs:
+  opts:
+    description: 'Command-line options for the bibcop tool'
+    required: false
+    default: ''
