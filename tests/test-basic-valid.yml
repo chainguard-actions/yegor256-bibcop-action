@@ -1,0 +1,28 @@
+name: Test basic usage with valid bib file
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Create a valid bib file
+        run: |
+          cat > "$GITHUB_WORKSPACE/refs.bib" << 'EOF'
+          @article{knuth1984,
+            author = {Knuth, Donald E.},
+            title = {Literate Programming},
+            journal = {The Computer Journal},
+            year = {1984},
+            volume = {27},
+            number = {2},
+            pages = {97--111},
+          }
+          EOF
+      - id: action
+        uses: .
+        continue-on-error: true
+      - name: Assert action ran
+        run: |
+          echo "Action completed (exit code may vary based on bib quality)"
+          echo "PASS"

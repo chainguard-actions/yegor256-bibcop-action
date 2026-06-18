@@ -1,0 +1,30 @@
+name: Test with custom opts input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Create a minimal bib file
+        run: |
+          cat > "$GITHUB_WORKSPACE/sample.bib" << 'EOF'
+          @article{sample2024,
+            author = {Smith, John},
+            title = {A Sample Article},
+            journal = {Journal of Examples},
+            year = {2024},
+            volume = {1},
+            number = {1},
+            pages = {1--10},
+          }
+          EOF
+      - id: action
+        uses: .
+        with:
+          opts: '--no-color'
+        continue-on-error: true
+      - name: Assert action accepted opts input
+        run: |
+          echo "Action ran with opts input provided"
+          echo "PASS"

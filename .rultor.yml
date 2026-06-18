@@ -1,0 +1,47 @@
+# MIT License
+#
+# Copyright (c) 2021-2024 Yegor Bugayenko
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+---
+docker:
+  image: yegor256/rultor-image:1.23.1
+assets:
+  docker-password: yegor256/home#assets/docker-password
+merge:
+  script: |-
+    sudo docker build "$(pwd)"
+release:
+  pre: false
+  script: |-
+    [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
+    sed -i -e "s/0.0.0/${tag}/" entry.sh
+    sed -i -e "s/0.0.0/${tag}/" Dockerfile
+    sed -i -e "s/:latest/${tag}/" action.yml
+    git add entry.sh
+    git add Dockerfile
+    git add action.yml
+    git commit -m "version set to ${tag}"
+    sudo make "--directory=$(pwd)"
+    repo=yegor256/bibcop-action
+    sudo docker build "$(pwd)" --tag "${repo}:${tag}"
+    sudo docker build "$(pwd)" --tag "${repo}:latest"
+    cat ../docker-password | sudo docker login --password-stdin -u yegor256
+    sudo docker push "${repo}:${tag}"
+    sudo docker push "${repo}:latest"
