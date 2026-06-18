@@ -8,6 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
+| 0.0.1 | [`0.0.1`](https://github.com/chainguard-actions/yegor256-bibcop-action/tree/0.0.1) | [`31517d7`](https://github.com/yegor256/bibcop-action/commit/31517d7000498d8ffb3ab547d1065fbe2b89f963) |
 | 0.0.3 | [`0.0.3`](https://github.com/chainguard-actions/yegor256-bibcop-action/tree/0.0.3) | [`104f4ec`](https://github.com/yegor256/bibcop-action/commit/104f4ecdcea6ea94618449f203e45ec1b68f0a97) |
 | 0.0.4 | [`0.0.4`](https://github.com/chainguard-actions/yegor256-bibcop-action/tree/0.0.4) | [`7fae44d`](https://github.com/yegor256/bibcop-action/commit/7fae44d3af0450210e56c54fc4311f92b7421382) |
 
