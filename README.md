@@ -1,15 +1,35 @@
-# yegor256/bibcop-action
+# Bibcop Github Action
 
-Check the quality of .bib files
+[![test](https://github.com/yegor256/bibcop-action/actions/workflows/test.yml/badge.svg)](https://github.com/yegor256/bibcop-action/actions/workflows/test.yml)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/bibcop-action/blob/master/LICENSE.txt)
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/yegor256/bibcop-action](https://github.com/yegor256/bibcop-action).
+Checks the quality of all BibTeX `.bib` files in the repository,
+using [bibcop](https://github.com/yegor256/bibcop).
 
-## Versions
+```yaml
+name: bibcop
+on:
+  push:
+  pull_request:
+jobs:
+  bibcop:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@master
+      - uses: yegor256/bibcop-action@0.0.0
+```
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| 0.0.3 | [`0.0.3`](https://github.com/chainguard-actions/yegor256-bibcop-action/tree/0.0.3) | [`104f4ec`](https://github.com/yegor256/bibcop-action/commit/104f4ecdcea6ea94618449f203e45ec1b68f0a97) |
-| 0.0.4 | [`0.0.4`](https://github.com/chainguard-actions/yegor256-bibcop-action/tree/0.0.4) | [`7fae44d`](https://github.com/yegor256/bibcop-action/commit/7fae44d3af0450210e56c54fc4311f92b7421382) |
+## How to Contribute
+
+In order to test this action, just run:
+
+```bash
+make test
+```
+
+This should build a new Docker image and then try to use it
+in order to render a simple `test.tex` document. You need to have
+[Docker](https://docs.docker.com/get-docker/) installed.
 
 ## Privacy
 
