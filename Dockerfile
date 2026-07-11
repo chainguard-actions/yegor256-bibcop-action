@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 Yegor Bugayenko
+# SPDX-License-Identifier: MIT
+
+FROM ubuntu:26.04
+
+LABEL "repository"="https://github.com/yegor256/bibcop-action"
+LABEL "maintainer"="Yegor Bugayenko"
+LABEL "version"="0.1.0"
+
+RUN apt-get -y update \
+  && apt-get -y --no-install-recommends install wget=* \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+ARG BIBCOP_VERSION=0.0.33
+RUN wget --quiet --no-check-certificate "https://raw.githubusercontent.com/yegor256/bibcop/${BIBCOP_VERSION}/bibcop.pl" \
+  && mv bibcop.pl /usr/bin \
+  && chmod a+x /usr/bin/bibcop.pl
+
+WORKDIR /home
+COPY entry.sh /home
+
+ENTRYPOINT ["/home/entry.sh"]

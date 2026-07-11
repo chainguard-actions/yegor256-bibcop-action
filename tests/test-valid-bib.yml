@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 Yegor Bugayenko
+# SPDX-License-Identifier: MIT
+---
+name: Test valid bib file
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set up valid bib file only
+        run: |
+          # Remove all existing .bib files (including fixtures)
+          find . -name '*.bib' -delete
+          # Create a valid bib file in the workspace root (format known to work with bibcop)
+          printf '@misc{x,\n  title={{Hello, World!}},\n  author={Bugayenko, Yegor},\n  year={2024}\n}\n' > test.bib
+          echo "Created test.bib:"
+          cat test.bib
+          echo "All .bib files in workspace:"
+          find . -name '*.bib'
+      - name: Run bibcop action on valid bib file
+        id: action
+        uses: .
+        with:
+          opts: '--verbose'
+      - name: Assert action succeeded with valid bib file
+        run: |
+          echo "PASS: action completed successfully with valid .bib file"

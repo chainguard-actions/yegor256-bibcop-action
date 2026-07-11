@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 Yegor Bugayenko
+# SPDX-License-Identifier: MIT
+---
+name: Test no bib files
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Remove all .bib files from workspace
+        run: |
+          find . -name '*.bib' -delete
+          echo "Removed all .bib files"
+          remaining=$(find . -name '*.bib' | wc -l)
+          echo "Remaining .bib files: $remaining"
+          if [ "$remaining" -ne 0 ]; then
+            echo "WARNING: still have .bib files:"
+            find . -name '*.bib'
+          fi
+      - name: Run bibcop action with no bib files
+        id: action
+        uses: .
+      - name: Assert action succeeded with no bib files
+        run: |
+          echo "PASS: action completed successfully when no .bib files are present"

@@ -1,0 +1,34 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 Yegor Bugayenko
+# SPDX-License-Identifier: MIT
+---
+# yamllint disable rule:line-length
+name: up
+'on':
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+permissions: {}
+jobs:
+  up:
+    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - run: |-
+          git fetch --tags --force && \
+          latest=$(git tag --sort=creatordate | tail -1) && \
+          sed -E -i "s/bibcop-action@.+$/bibcop-action@${latest}/g" README.md
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+        with:
+          sign-commits: true
+          branch: version-up
+          commit-message: 'new version in README'
+          delete-branch: true
+          title: 'New version in README'
+          assignees: yegor256
+          base: master
