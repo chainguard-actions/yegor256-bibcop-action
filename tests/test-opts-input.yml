@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2024 Yegor Bugayenko
 # SPDX-License-Identifier: MIT
 ---
-name: Test valid bib file
+name: Test opts input
 on:
   workflow_dispatch:
 jobs:
@@ -14,12 +14,14 @@ jobs:
       - name: Create a valid .bib file
         run: |
           printf '@misc{sample2024,\n  title={{Hello, World!}},\n  author={Bugayenko, Yegor},\n  year={2024}\n}\n' \
-            > "$GITHUB_WORKSPACE/test-refs.bib"
-          echo "Created test-refs.bib:"
-          cat "$GITHUB_WORKSPACE/test-refs.bib"
-      - name: Run bibcop action on valid bib file
+            > "$GITHUB_WORKSPACE/sample.bib"
+          echo "Created sample.bib:"
+          cat "$GITHUB_WORKSPACE/sample.bib"
+      - name: Run bibcop action with opts input (empty string)
         id: action
         uses: .
-      - name: Assert action completed successfully
+        with:
+          opts: ''
+      - name: Assert action completed successfully with opts
         run: |
-          echo "PASS: bibcop action completed without error on valid .bib file"
+          echo "PASS: bibcop action completed with opts input provided"

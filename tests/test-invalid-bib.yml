@@ -9,16 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Set up invalid bib file only
+      - name: Remove any existing .bib files from workspace
+        run: find "$GITHUB_WORKSPACE" -name '*.bib' -delete
+      - name: Create an invalid .bib file
         run: |
-          # Remove all existing .bib files (including fixtures)
-          find . -name '*.bib' -delete
-          # Create an invalid bib file (missing required fields: author, year)
-          printf '@article{badentry,\n  title = {A Paper Without Author or Journal},\n}\n' > broken.bib
-          echo "Created broken.bib:"
-          cat broken.bib
-          echo "All .bib files in workspace:"
-          find . -name '*.bib'
+          printf '@article{badentry,\n  title = {A Paper Without Required Fields},\n}\n' \
+            > "$GITHUB_WORKSPACE/bad-refs.bib"
+          echo "Created bad-refs.bib:"
+          cat "$GITHUB_WORKSPACE/bad-refs.bib"
       - name: Run bibcop action on invalid bib file (expect failure)
         id: action
         uses: .
@@ -29,8 +27,8 @@ jobs:
         run: |
           echo "outcome: $OUTCOME"
           if [ "$OUTCOME" = "failure" ]; then
-            echo "PASS: action correctly failed on invalid .bib file"
+            echo "PASS: bibcop correctly detected errors in invalid .bib file"
           else
-            echo "FAIL: expected action to fail on invalid .bib file, but got outcome: $OUTCOME"
+            echo "FAIL: expected bibcop to fail on invalid .bib file, but outcome was: $OUTCOME"
             exit 1
           fi

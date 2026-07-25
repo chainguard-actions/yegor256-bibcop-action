@@ -9,19 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Remove all .bib files from workspace
+      - name: Remove any .bib files that might exist
         run: |
-          find . -name '*.bib' -delete
-          echo "Removed all .bib files"
-          remaining=$(find . -name '*.bib' | wc -l)
-          echo "Remaining .bib files: $remaining"
-          if [ "$remaining" -ne 0 ]; then
-            echo "WARNING: still have .bib files:"
-            find . -name '*.bib'
-          fi
-      - name: Run bibcop action with no bib files
+          find "$GITHUB_WORKSPACE" -name '*.bib' -delete
+          echo "Removed any existing .bib files"
+          echo "Remaining .bib files: $(find "$GITHUB_WORKSPACE" -name '*.bib' | wc -l)"
+      - name: Run bibcop action with no .bib files
         id: action
         uses: .
-      - name: Assert action succeeded with no bib files
+      - name: Assert action completed successfully with no bib files
         run: |
-          echo "PASS: action completed successfully when no .bib files are present"
+          echo "PASS: action completed without error when no .bib files present"
