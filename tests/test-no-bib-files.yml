@@ -1,4 +1,4 @@
-name: Test graceful exit when no bib files present
+name: Test no bib files scenario
 on:
   workflow_dispatch:
 jobs:
@@ -6,13 +6,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Remove all .bib files from workspace
+
+      - name: Remove all bib files from workspace
         run: |
           find "$GITHUB_WORKSPACE" -name '*.bib' -delete
           remaining=$(find "$GITHUB_WORKSPACE" -name '*.bib' | wc -l)
           echo "Remaining .bib files: $remaining"
-      - id: action
+          if [ "$remaining" -ne 0 ]; then
+            echo "FAIL: could not remove all .bib files"
+            exit 1
+          fi
+          echo "All .bib files removed successfully"
+
+      - name: Run bibcop action with no bib files
+        id: action
         uses: .
-      - name: Assert action completed without error
+        with:
+          opts: ''
+
+      - name: Assert action succeeded with no bib files
         run: |
-          echo "PASS: action exited gracefully when no .bib files were found"
+          echo "PASS: action completed successfully when no .bib files are present"

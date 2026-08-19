@@ -6,8 +6,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - id: action
-        uses: .
-      - name: Assert action completed successfully
+
+      - name: Remove all existing bib files and create a known-valid one
         run: |
-          echo "PASS: action ran without error on valid .bib file"
+          find "$GITHUB_WORKSPACE" -name '*.bib' -delete
+          echo "@misc{x, title={{Hello, World!}}, author={Bugayenko, Yegor}, year={2024}}" > "$GITHUB_WORKSPACE/test.bib"
+          echo "Created test.bib:"
+          cat "$GITHUB_WORKSPACE/test.bib"
+
+      - name: Run bibcop action on valid bib file
+        id: action
+        uses: .
+        with:
+          opts: ''
+
+      - name: Assert action succeeded
+        run: |
+          echo "PASS: action completed without error"
