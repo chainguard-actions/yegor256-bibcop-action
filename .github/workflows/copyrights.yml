@@ -20,16 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: 'bibcop-action'
-description: 'Check the quality of .bib files'
-branding:
-  icon: alert-triangle
-  color: orange
-runs:
-  using: 'docker'
-  image: 'docker://yegor256/bibcop-action:0.0.3@sha256:65dd1ed06179a2627617a046f125a01afc323a59625bd0578e16ca236fc318cb'
-inputs:
-  opts:
-    description: 'Command-line options for the bibcop tool'
-    required: false
-    default: ''
+name: copyrights
+'on':
+  push:
+  pull_request:
+permissions: {}
+jobs:
+  copyrights:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: yegor256/copyrights-action@338e79c1f0d97551b109f63d79cbad3537f7487d # 0.0.4

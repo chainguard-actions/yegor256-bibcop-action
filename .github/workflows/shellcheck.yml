@@ -20,16 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: 'bibcop-action'
-description: 'Check the quality of .bib files'
-branding:
-  icon: alert-triangle
-  color: orange
-runs:
-  using: 'docker'
-  image: 'docker://yegor256/bibcop-action:0.0.3@sha256:65dd1ed06179a2627617a046f125a01afc323a59625bd0578e16ca236fc318cb'
-inputs:
-  opts:
-    description: 'Command-line options for the bibcop tool'
-    required: false
-    default: ''
+name: shellcheck
+'on':
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+permissions: {}
+jobs:
+  shellcheck:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ludeeus/action-shellcheck@00b27aa7cb85167568cb48a3838b75f4265f2bca # master

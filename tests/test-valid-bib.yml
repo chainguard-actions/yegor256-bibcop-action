@@ -1,4 +1,4 @@
-name: Test bibcop with verbose opts
+name: Test valid bib file
 on:
   workflow_dispatch:
 jobs:
@@ -14,11 +14,9 @@ jobs:
           fi
           echo "Fixture file found:"
           cat tests/fixtures/valid.bib
-      - name: Run bibcop action with verbose opts
+      - name: Run bibcop action on valid bib file
         id: action
         uses: .
-        with:
-          opts: '--verbose'
-      - name: Assert action succeeded with verbose opts
+      - name: Assert action succeeded
         run: |
-          echo "PASS: action completed successfully with --verbose opts"
+          echo "PASS: action completed successfully on valid .bib file"

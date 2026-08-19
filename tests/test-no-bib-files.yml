@@ -1,0 +1,25 @@
+name: Test no bib files
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Remove all .bib files from workspace
+        run: |
+          set -e
+          find "$GITHUB_WORKSPACE" -name '*.bib' -delete
+          count=$(find "$GITHUB_WORKSPACE" -name '*.bib' 2>/dev/null | wc -l)
+          echo "Remaining .bib file count: $count"
+          if [ "$count" -ne 0 ]; then
+            echo "FAIL: could not remove all .bib files"
+            exit 1
+          fi
+          echo "All .bib files removed successfully"
+      - name: Run bibcop action with no .bib files
+        id: action
+        uses: .
+      - name: Assert action succeeded with no bib files
+        run: |
+          echo "PASS: action completed successfully with no .bib files"
